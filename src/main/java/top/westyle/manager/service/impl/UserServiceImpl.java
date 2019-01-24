@@ -1,7 +1,9 @@
 package top.westyle.manager.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.westyle.manager.entity.User;
+import top.westyle.manager.mapper.UserMapper;
 import top.westyle.manager.service.UserService;
 
 import java.io.Serializable;
@@ -14,7 +16,8 @@ import java.util.Map;
 @Service("userService")
 public class UserServiceImpl implements UserService, Serializable {
     private static final long serialVersionUID = 1723944673037437988L;
-
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public int addUser(User user) {
         return 0;

@@ -6,7 +6,21 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: yjmming
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
 mybatis:
   type-aliases-package: top.westyle.manager.entity
-#连接池配置信息
-#spring
+  mapper-locations: classpath:mapping/*.xml

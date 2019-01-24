@@ -1,5 +1,6 @@
 package top.westyle.manager.mapper;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import top.westyle.manager.entity.User;
 
@@ -13,6 +14,7 @@ public interface UserMapper {
      * @param user
      * @return
      */
+    @Insert("insert into sys_user(id,user_id,password,user_name,id_number) values(#{id},#{userId},#{password},#{userName},#{idNumber})")
    int addUser(User user);
 
     /**
