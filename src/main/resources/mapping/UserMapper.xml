@@ -18,8 +18,13 @@
            <if test="idNumber != null">#{idNumber, jdbcType=VARCHAR}</if>
        </trim>
    </insert>
-    <select id="findUserByUserId" resultType="top.westyle.manager.entity.User" parameterType="String">
+    <select id="findUserByUserId" resultType="user" parameterType="String">
         select id from sys_user
         where user_id = #{userId, jdbcType=VARCHAR}
+    </select>
+    <select id="findByUser" resultType="user" parameterType="user">
+        select id,user_name from sys_user
+        where user_id = #{userId, jdbcType=VARCHAR}
+        and password = #{password, jdbcType=VARCHAR}
     </select>
 </mapper>

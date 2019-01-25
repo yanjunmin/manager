@@ -37,4 +37,9 @@ public class UserServiceImpl implements UserService, Serializable {
     public List<User> findUserBycondition(Map<String, String> map) {
         return null;
     }
+
+    @Override
+    public User findByUser(User user) {
+        return userMapper.findByUser(user);
+    }
 }

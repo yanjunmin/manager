@@ -36,4 +36,11 @@ public interface UserService {
      * @return
      */
     public List<User> findUserBycondition(Map<String, String> map);
+
+    /**
+     * 根据用户对象查询
+     * @param user
+     * @return
+     */
+    public User findByUser(User user);
 }

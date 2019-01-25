@@ -32,4 +32,10 @@ public interface UserMapper {
      */
     List<User> findUserBycondition(Map<String, String> map);
 
+    /**
+     * 根据用户对象查询
+     * @return
+     */
+    User findByUser(User user);
+
 }

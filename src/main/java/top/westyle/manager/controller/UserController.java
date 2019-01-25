@@ -1,5 +1,6 @@
 package top.westyle.manager.controller;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,5 +50,30 @@ public class UserController {
             }
         }
        return map.toString();
+    }
+
+    /**
+     * 用户登录
+     * @param user
+     * @return
+     */
+    @RequestMapping("login")
+    public String login(@RequestBody User user) {
+        Map<String, Object> map = new HashMap<>();
+        //判断用户信息
+        User u = userService.findByUser(user);
+        if(u != null) {
+            //登录成功,存入redis
+            map.put("state", "0");
+            HashMap<String, String> data = new HashMap<>();
+            data.put("id", u.getId());
+            data.put("userName", u.getUserName());
+            map.put("data", data);
+        }else{
+            //提示用户不存在或密码错误
+            map.put("state", "1");
+            map.put("info", "用户不存在或密码错误");
+        }
+        return JSONUtils.toJSONString(map);
     }
 }
