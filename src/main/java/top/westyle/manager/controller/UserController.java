@@ -2,6 +2,7 @@ package top.westyle.manager.controller;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,6 +65,8 @@ public class UserController {
         User u = userService.findByUser(user);
         if(u != null) {
             //登录成功,存入redis
+            RedisTemplate<String, Object> template = new RedisTemplate<>();
+            template.set
             map.put("state", "0");
             HashMap<String, String> data = new HashMap<>();
             data.put("id", u.getId());
@@ -75,5 +78,12 @@ public class UserController {
             map.put("info", "用户不存在或密码错误");
         }
         return JSONUtils.toJSONString(map);
+    }
+    @RequestMapping("findById")
+    public User findById(@RequestBody User user) {
+        System.out.println(user);
+        User u = userService.findUserById(user.getId());
+        System.out.println(u.toString());
+        return u;
     }
 }

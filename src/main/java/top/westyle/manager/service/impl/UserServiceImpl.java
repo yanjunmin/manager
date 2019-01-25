@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService, Serializable {
 
     @Override
     public User findUserById(String id) {
-        return null;
+        return userMapper.findUserById(id);
     }
 
     @Override
