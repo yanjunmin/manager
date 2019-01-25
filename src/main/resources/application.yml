@@ -23,4 +23,4 @@ spring:
     maxOpenPreparedStatements: 20
 mybatis:
   type-aliases-package: top.westyle.manager.entity
-  mapper-locations: classpath:mapping/*.xml
+  #mapper-locations: classpath:mapping/*.xml

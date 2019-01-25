@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService, Serializable {
     private UserMapper userMapper;
     @Override
     public int addUser(User user) {
-        return 0;
+        return userMapper.addUser(user);
     }
 
     @Override
