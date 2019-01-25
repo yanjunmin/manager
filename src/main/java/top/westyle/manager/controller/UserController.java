@@ -66,7 +66,7 @@ public class UserController {
         if(u != null) {
             //登录成功,存入redis
             RedisTemplate<String, Object> template = new RedisTemplate<>();
-            template.set
+            //template.set
             map.put("state", "0");
             HashMap<String, String> data = new HashMap<>();
             data.put("id", u.getId());
