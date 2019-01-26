@@ -24,9 +24,23 @@ public interface UserService {
     public User findUserById(String id);
 
     /**
+     * 根据用户账号查询用户
+     * @param userId
+     * @return
+     */
+    public User fingUserByUserId(String userId);
+
+    /**
      * 根据传入条件查询多个或一个用户信息
      * @param map
      * @return
      */
     public List<User> findUserBycondition(Map<String, String> map);
+
+    /**
+     * 根据用户对象查询
+     * @param user
+     * @return
+     */
+    public User findByUser(User user);
 }

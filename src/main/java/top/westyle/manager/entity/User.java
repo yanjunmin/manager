@@ -46,4 +46,15 @@ public class User extends BaseEntity{
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", userName='" + userName + '\'' +
+                ", idNumber='" + idNumber + '\'' +
+                '}';
+    }
 }

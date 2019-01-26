@@ -14,7 +14,6 @@ public interface UserMapper {
      * @param user
      * @return
      */
-    @Insert("insert into sys_user(id,user_id,password,user_name,id_number) values(#{id},#{userId},#{password},#{userName},#{idNumber})")
    int addUser(User user);
 
     /**
@@ -24,11 +23,19 @@ public interface UserMapper {
      */
     User findUserById(String id);
 
+    User findUserByUserId(String userId);
+
     /**
      * 根据条件查询多个用户信息
      * @param map
      * @return
      */
     List<User> findUserBycondition(Map<String, String> map);
+
+    /**
+     * 根据用户对象查询
+     * @return
+     */
+    User findByUser(User user);
 
 }
