@@ -22,8 +22,12 @@
         select id from sys_user
         where user_id = #{userId, jdbcType=VARCHAR}
     </select>
+    <select id="findUserById" resultType="user" parameterType="String">
+        select id,user_name as userName,id_number as IdNumber,user_id as userId from sys_user
+        where id = #{id, jdbcType=VARCHAR}
+    </select>
     <select id="findByUser" resultType="user" parameterType="user">
-        select id,user_name from sys_user
+        select id,user_id as userId,user_name as userName from sys_user
         where user_id = #{userId, jdbcType=VARCHAR}
         and password = #{password, jdbcType=VARCHAR}
     </select>

@@ -2,7 +2,7 @@ package top.westyle.manager.controller;
 
 import com.alibaba.druid.support.json.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,16 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 import top.westyle.manager.entity.User;
 import top.westyle.manager.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
     @RequestMapping("home")
     public String home() {
         return "您好，这是您第100次登录";
@@ -62,8 +64,11 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         //判断用户信息
         User u = userService.findByUser(user);
+        System.out.println(redisTemplate.opsForValue().get(u.getUserId()));
         if(u != null) {
             //登录成功,存入redis
+            redisTemplate.opsForValue().set(u.getUserId(), u);
+            redisTemplate.expire(u.getUserId(),60, TimeUnit.SECONDS);
             map.put("state", "0");
             HashMap<String, String> data = new HashMap<>();
             data.put("id", u.getId());
@@ -75,5 +80,12 @@ public class UserController {
             map.put("info", "用户不存在或密码错误");
         }
         return JSONUtils.toJSONString(map);
+    }
+    @RequestMapping("findById")
+    public User findById(@RequestBody User user) {
+        System.out.println(user);
+        User u = userService.findUserById(user.getId());
+        System.out.println(u.toString());
+        return u;
     }
 }

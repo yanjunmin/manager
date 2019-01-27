@@ -1,6 +1,5 @@
 package top.westyle.manager.mapper;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import top.westyle.manager.entity.User;
 

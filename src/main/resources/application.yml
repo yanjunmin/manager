@@ -6,7 +6,19 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    # 使用druid数据源
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 1000
+    jedis:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-wait: 1
+        max-idle: 8
+
+# 使用druid数据源
 #    type: com.alibaba.druid.pool.DruidDataSource
 #    filters: stat
 #    maxActive: 20
@@ -26,7 +38,4 @@ mybatis:
   mapper-locations: classpath:mapping/*.xml
 logging:
   level:
-    top:
-      westyle:
-        manager:
-          mapper: DEBUG
+    top.westyle.manager.mapper: DEBUG
