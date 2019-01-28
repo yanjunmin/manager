@@ -2,6 +2,11 @@ package top.westyle.manager.entity;
 
 import java.util.Date;
 
+/**
+ * 用户
+ * @author yjm
+ * @date 2019-1-28 22:49:52
+ */
 public class User extends BaseEntity{
     private String id;//唯一标识
     private String userId;//账号
