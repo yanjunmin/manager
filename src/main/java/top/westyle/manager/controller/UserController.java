@@ -1,91 +1,53 @@
 package top.westyle.manager.controller;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import top.westyle.manager.entity.User;
+import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.UserService;
+import top.westyle.manager.utils.Response;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user/")
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private RedisTemplate redisTemplate;
     @RequestMapping("home")
-    public String home() {
-        return "您好，这是您第100次登录";
+    public int index(){
+        User user = new User();
+        user.setPassword("123");
+        user.setId("7878");
+        return userService.updateUserById(user);
+    }
+    @RequestMapping("test")
+    public String test(){
+        return "您好!这是您第一百次登录!";
+    }
+    @PostMapping("login")
+    public Response login(@RequestBody User user){
+        User userinfo = userService.findUserByCondition(user).get(0);
+        return new Response("0","登录成功", userinfo);
     }
 
-    @RequestMapping(value="add", method = RequestMethod.POST)
-    public String addUser(@RequestBody User user) {
-        /**
-         * 返回结果
-         */
-        Map<String, String> map = new HashMap<>();
-        int num = 0;
-        user.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-        System.out.println(user.toString());
-        if(user != null && user.getUserId() != null) {
-            User u = userService.fingUserByUserId(user.getUserId());
-            if(u != null){
-                map.put("state","1");
-                map.put("info", "该账号已被注册");
-            }else{
-              num = userService.addUser(user);
-                if(num > 0) {
-                    map.put("state", "0");
-                }else{
-                    map.put("state", "1");
-                    map.put("info", "数据异常,请联系管理员");
-                }
-            }
+    @RequestMapping("inser")
+    public Response testinsert(){
+        List<User> users = new ArrayList<User>();
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setId(UUID.randomUUID().toString().replaceAll("-",""));
+            user.setUserName("yanjunin"+i);
+            user.setPassword("123456" + i);
+            //userService.addUser(user);
+            users.add(user);
         }
-       return JSONUtils.toJSONString(map);
-    }
-
-    /**
-     * 用户登录
-     * @param user
-     * @return
-     */
-    @RequestMapping("login")
-    public String login(@RequestBody User user) {
-        Map<String, Object> map = new HashMap<>();
-        //判断用户信息
-        User u = userService.findByUser(user);
-        System.out.println(redisTemplate.opsForValue().get(u.getUserId()));
-        if(u != null) {
-            //登录成功,存入redis
-            redisTemplate.opsForValue().set(u.getUserId(), u);
-            redisTemplate.expire(u.getUserId(),60, TimeUnit.SECONDS);
-            map.put("state", "0");
-            HashMap<String, String> data = new HashMap<>();
-            data.put("id", u.getId());
-            data.put("userName", u.getUserName());
-            map.put("data", data);
-        }else{
-            //提示用户不存在或密码错误
-            map.put("state", "1");
-            map.put("info", "用户不存在或密码错误");
-        }
-        return JSONUtils.toJSONString(map);
-    }
-    @RequestMapping("findById")
-    public User findById(@RequestBody User user) {
-        System.out.println(user);
-        User u = userService.findUserById(user.getId());
-        System.out.println(u.toString());
-        return u;
+       int num = userService.insertBatchUser(users);
+        System.err.println(num);
+        return new Response("0","登录成功", null);
     }
 }

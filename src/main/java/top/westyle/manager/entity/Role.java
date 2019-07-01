@@ -51,4 +51,15 @@ public class Role extends BaseEntity {
     public void setCeatedTime(Date ceatedTime) {
         this.ceatedTime = ceatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id='" + id + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", ceatedTime=" + ceatedTime +
+                '}';
+    }
 }

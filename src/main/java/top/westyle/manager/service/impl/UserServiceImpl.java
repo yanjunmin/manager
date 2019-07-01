@@ -1,45 +1,103 @@
 package top.westyle.manager.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.westyle.manager.entity.User;
-import top.westyle.manager.mapper.UserMapper;
+import org.springframework.transaction.annotation.Transactional;
+import top.westyle.manager.dao.common.UserMapper;
+import top.westyle.manager.entity.common.*;
 import top.westyle.manager.service.UserService;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
-
-/**
- * 用户操作接口实现
- */
-@Service("userService")
-public class UserServiceImpl implements UserService, Serializable {
-    private static final long serialVersionUID = 1723944673037437988L;
+@Transactional(readOnly = true)
+@Service
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Override
     public int addUser(User user) {
-        return userMapper.addUser(user);
+        return userMapper.insertSelective(user);
+    }
+
+
+    @Override
+    public int updateUserById(User user) {
+        return userMapper.updateById(user);
     }
 
     @Override
-    public User findUserById(String id) {
-        return userMapper.findUserById(id);
+    public List<User> findUserByCondition(User user) {
+        return user == null ? null : userMapper.selectList( new QueryWrapper<>(user));
     }
 
     @Override
-    public User fingUserByUserId(String userId) {
-        return userMapper.findUserByUserId(userId);
+    public int addUserDetailInfo(UserInfo userInfo) {
+        return 0;
     }
 
     @Override
-    public List<User> findUserBycondition(Map<String, String> map) {
+    public int updateUserDetailInfo(UserInfo userInfo) {
+        return 0;
+    }
+
+    @Override
+    public List<UserInfo> findUserInfo(UserInfo userInfo) {
         return null;
     }
 
     @Override
-    public User findByUser(User user) {
-        return userMapper.findByUser(user);
+    public int insertBatchUser(List<User> userlist) {
+        int count = 0;
+        for (User user:userlist
+             ) {
+            count += userMapper.insert(user);
+        }
+        return count;
     }
+
+    @Override
+    public int addUserRole(UserRole userRole) {
+        return 0;
+    }
+
+    @Override
+    public int updateUserRole(UserRole userRole) {
+        return 0;
+    }
+
+    @Override
+    public List<UserRole> findUserRole(String userId) {
+        return null;
+    }
+
+    @Override
+    public int addUserGroupUser(UserGroupUser userGroupUser) {
+        return 0;
+    }
+
+    @Override
+    public int updateUserGroupUser(UserGroupUser userGroupUser) {
+        return 0;
+    }
+
+    @Override
+    public List<UserGroupUser> findUserGroupUser(UserGroupUser userGroupUser) {
+        return null;
+    }
+
+    @Override
+    public int addUserGroup(UserGroup userGroup) {
+        return 0;
+    }
+
+    @Override
+    public int updateUserGroup(UserGroup userGroup) {
+        return 0;
+    }
+
+    @Override
+    public List<UserGroup> findUserGroup(UserGroup userGroup) {
+        return null;
+    }
+
 }

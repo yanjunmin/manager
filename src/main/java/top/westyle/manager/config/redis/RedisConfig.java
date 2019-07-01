@@ -1,4 +1,4 @@
-package top.westyle.manager.config;
+package top.westyle.manager.config.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.westyle.manager.dao.common.OperationMapper" >
+  <resultMap id="BaseResultMap" type="top.westyle.manager.entity.common.Operation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="operation_name" property="operationName" jdbcType="VARCHAR" />
+    <result column="operation_code" property="operationCode" jdbcType="VARCHAR" />
+    <result column="ljurlqz" property="ljurlqz" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, operation_name, operation_code, ljurlqz, parent_id, created_time, updated_time, 
+    created_by, updated_by, valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_operation
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sys_operation
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="top.westyle.manager.entity.common.Operation" >
+    insert into sys_operation (id, operation_name, operation_code, 
+      ljurlqz, parent_id, created_time, 
+      updated_time, created_by, updated_by, 
+      valid)
+    values (#{id,jdbcType=VARCHAR}, #{operationName,jdbcType=VARCHAR}, #{operationCode,jdbcType=VARCHAR}, 
+      #{ljurlqz,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, 
+      #{valid,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="top.westyle.manager.entity.common.Operation" >
+    insert into sys_operation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="operationName != null" >
+        operation_name,
+      </if>
+      <if test="operationCode != null" >
+        operation_code,
+      </if>
+      <if test="ljurlqz != null" >
+        ljurlqz,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+      <if test="valid != null" >
+        valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="operationName != null" >
+        #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationCode != null" >
+        #{operationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ljurlqz != null" >
+        #{ljurlqz,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null" >
+        #{valid,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.westyle.manager.entity.common.Operation" >
+    update sys_operation
+    <set >
+      <if test="operationName != null" >
+        operation_name = #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationCode != null" >
+        operation_code = #{operationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ljurlqz != null" >
+        ljurlqz = #{ljurlqz,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="valid != null" >
+        valid = #{valid,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.westyle.manager.entity.common.Operation" >
+    update sys_operation
+    set operation_name = #{operationName,jdbcType=VARCHAR},
+      operation_code = #{operationCode,jdbcType=VARCHAR},
+      ljurlqz = #{ljurlqz,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR},
+      valid = #{valid,jdbcType=CHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

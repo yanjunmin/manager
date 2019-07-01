@@ -1,5 +1,8 @@
 package top.westyle.manager.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.util.Date;
 
 /**
@@ -7,6 +10,7 @@ import java.util.Date;
  * @author yjm
  * @date 2019-1-28 22:49:52
  */
+@TableName("sys_user")
 public class User extends BaseEntity{
     private String id;//唯一标识
     private String userId;//账号
@@ -23,6 +27,7 @@ public class User extends BaseEntity{
     private Date updatedBy;//更新者
     private Date loginTime;//登录时间
     private Date lastLoginTime;//上一次登录时间
+    @TableField(exist = false)
     private int loginCount;//登录次数
 
     public String getMobile() {
