@@ -1,6 +1,8 @@
 package top.westyle.manager.service;
 
 import top.westyle.manager.entity.common.Power;
+import top.westyle.manager.entity.common.PowerMenu;
+import top.westyle.manager.entity.common.PowerPage;
 import top.westyle.manager.entity.common.RolePower;
 
 import java.util.List;
@@ -45,9 +47,30 @@ public interface PowerService {
     int updateRolePower(RolePower rolePower);
 
     /**
-     * 查询角色权限管理表信息
+     * 查询角色权限关联表信息
      * @param rolePower
      * @return
      */
     List<RolePower> findRolePower(RolePower rolePower);
+
+    /**
+     * 添加菜单权限关联表信息
+     * @param powerMenu
+     * @return
+     */
+    int addMenuPower(PowerMenu powerMenu);
+
+    /**
+     * 更新菜单权限关联表信息
+     * @param powerMenu
+     * @return
+     */
+    int updateMenuPower(PowerMenu powerMenu);
+
+    /**
+     * 查询菜单权限关联表信息
+     * @param powerMenu
+     * @return
+     */
+    List<PowerMenu> findMenuPower(PowerMenu powerMenu);
 }
