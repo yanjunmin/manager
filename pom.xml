@@ -73,7 +73,6 @@
             <optional>true</optional>
             <scope>runtime</scope>
         </dependency>
-        <!-- spring热部署 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>springloaded</artifactId>

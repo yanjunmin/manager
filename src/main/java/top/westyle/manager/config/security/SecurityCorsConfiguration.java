@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * @author yjm
- * @deprecated 跨域安全配置
+ * @description 跨域安全配置
  * @date 2019-4-7 14:33:53
  */
 @Configuration

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author yjm
- * @deprecated durid监控页面配置 默认地址 localhost:8080/druid/login.html
+ * @description durid监控页面配置 默认地址 localhost:8080/druid/login.html
  * @date 2019-4-7 14:53:45
  */
 @Configuration
