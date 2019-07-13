@@ -9,7 +9,7 @@ import top.westyle.manager.entity.common.*;
 import top.westyle.manager.service.UserService;
 
 import java.util.List;
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired

@@ -7,7 +7,7 @@ import top.westyle.manager.entity.common.UserGroupRole;
 import top.westyle.manager.service.RoleService;
 
 import java.util.List;
-@Transactional(readOnly = true)
+@Transactional
 @Service
 public class RoleServiceImpl implements RoleService {
     @Override
