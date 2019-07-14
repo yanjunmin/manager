@@ -1,7 +1,9 @@
 package top.westyle.manager.entity.common;
 
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.util.Date;
+@TableName("sys_role")
 public class Role {
     private String id;
 

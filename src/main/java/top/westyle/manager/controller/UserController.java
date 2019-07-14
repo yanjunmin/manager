@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
+import top.westyle.manager.service.RoleService;
 import top.westyle.manager.service.UserService;
 import top.westyle.manager.utils.Response;
 
@@ -18,6 +20,8 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
     @RequestMapping("home")
     public int index(){
         User user = new User();
@@ -41,12 +45,16 @@ public class UserController {
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            user.setUserName("yanjunidn"+i);
+            user.setUserName("yanjdfsddugfgn"+i);
             user.setPassword("123456" + i);
             //userService.addUser(user);
             users.add(user);
         }
        int num = userService.insertBatchUser(users);
+        Role role = new Role();
+        role.setId("dddd");
+        role.setRoleName("东风股份");
+        roleService.addRole(role);
         System.err.println(num);
         return new Response("0","登录成功", null);
     }

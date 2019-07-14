@@ -1,4 +1,4 @@
-package top.westyle.manager.util;
+package top.westyle.manager.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * @author yjm
- * @deprecated  Spring的ApplicationContext的持有者,可以用静态方法的方式获取spring容器中的bean
+ * @description  Spring的ApplicationContext的持有者,可以用静态方法的方式获取spring容器中的bean
  * @Date 2019-4-7 18:16:45
  */
 public class SpringContextHolder implements ApplicationContextAware {
