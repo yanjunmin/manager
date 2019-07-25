@@ -30,7 +30,7 @@ public class DruidConfiguration {
         servletRegistrationBean.addInitParameter("loginUsername", "admin");
         servletRegistrationBean.addInitParameter("loginPassword", "admin");
         //是否能够重置数据 禁用HTML页面上的“Reset All”功能
-        servletRegistrationBean.addInitParameter("resetEnable","false");
+        servletRegistrationBean.addInitParameter("resetEnable","true");
         return servletRegistrationBean;
     }
     @Bean

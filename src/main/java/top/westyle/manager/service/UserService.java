@@ -1,5 +1,6 @@
 package top.westyle.manager.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import top.westyle.manager.entity.common.*;
 
 import java.util.List;
@@ -111,9 +112,10 @@ public interface UserService {
     int updateUserGroup(UserGroup userGroup);
 
     /**
-     * 查询用户组信息
+     * 查询用户组信息,分页
      * @param userGroup
      * @return
      */
-    List<UserGroup> findUserGroup(UserGroup userGroup);
+    List<UserGroup> findUserGroup(UserGroup userGroup, Page page);
+
 }

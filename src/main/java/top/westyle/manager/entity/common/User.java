@@ -1,10 +1,11 @@
 package top.westyle.manager.entity.common;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import top.westyle.manager.entity.BaseEntity;
 
 import java.util.Date;
 @TableName("sys_user")
-public class User {
+public class User extends BaseEntity {
     private String id;
 
     private String userName;

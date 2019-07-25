@@ -1,8 +1,10 @@
 package top.westyle.manager.entity.common;
 
+import top.westyle.manager.entity.BaseEntity;
+
 import java.util.Date;
 
-public class File {
+public class File extends BaseEntity {
     private String id;
 
     private String fileName;

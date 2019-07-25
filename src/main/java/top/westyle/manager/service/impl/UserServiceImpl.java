@@ -1,6 +1,7 @@
 package top.westyle.manager.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserGroup> findUserGroup(UserGroup userGroup) {
+    public List<UserGroup> findUserGroup(UserGroup userGroup, Page page) {
         return null;
     }
 
