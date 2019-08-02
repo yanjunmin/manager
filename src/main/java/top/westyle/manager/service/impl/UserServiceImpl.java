@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserGroupUser> findUserGroupUser(UserGroupUser userGroupUser) {
+    public List<UserGroupUser> findUserGroupUser(UserGroupUser userGroupUser, Page<UserGroupUser> page) {
         return null;
     }
 
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserGroup> findUserGroup(UserGroup userGroup, Page page) {
+    public List<UserGroup> findUserGroup(UserGroup userGroup, Page<UserGroup> page) {
         return null;
     }
 

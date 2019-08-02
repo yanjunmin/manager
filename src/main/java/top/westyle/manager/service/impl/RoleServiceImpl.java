@@ -1,5 +1,6 @@
 package top.westyle.manager.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.westyle.manager.dao.common.RoleMapper;
@@ -25,7 +26,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> findByCondition(Role role) {
+    public List<Role> findByCondition(Role role, Page page) {
         return null;
     }
 
@@ -45,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<UserGroupRole> findUserGroupRole(UserGroupRole userGroupRole) {
+    public List<UserGroupRole> findUserGroupRole(UserGroupRole userGroupRole, Page page) {
         return null;
     }
 }

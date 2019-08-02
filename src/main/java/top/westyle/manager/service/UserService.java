@@ -95,7 +95,7 @@ public interface UserService {
      * @param userGroupUser
      * @return
      */
-    List<UserGroupUser> findUserGroupUser(UserGroupUser userGroupUser);
+    List<UserGroupUser> findUserGroupUser(UserGroupUser userGroupUser, Page<UserGroupUser> page);
 
     /**
      * 添加用户组信息
@@ -116,6 +116,6 @@ public interface UserService {
      * @param userGroup
      * @return
      */
-    List<UserGroup> findUserGroup(UserGroup userGroup, Page page);
+    List<UserGroup> findUserGroup(UserGroup userGroup, Page<UserGroup> page);
 
 }

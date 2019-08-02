@@ -1,5 +1,6 @@
 package top.westyle.manager.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.UserGroupRole;
 
@@ -28,7 +29,7 @@ public interface RoleService {
      * @param role
      * @return
      */
-    List<Role> findByCondition(Role role);
+    List<Role> findByCondition(Role role, Page<Role> page);
 
     /**
      * 批量插入角色信息
@@ -56,5 +57,5 @@ public interface RoleService {
      * @param userGroupRole
      * @return
      */
-    List<UserGroupRole> findUserGroupRole(UserGroupRole userGroupRole);
+    List<UserGroupRole> findUserGroupRole(UserGroupRole userGroupRole, Page<UserGroupRole> page);
 }
