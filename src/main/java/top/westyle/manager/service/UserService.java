@@ -23,6 +23,13 @@ public interface UserService {
     int updateUserById(User user);
 
     /**
+     * 根据用户名查询用户信息
+     * @param userName
+     * @return
+     */
+    User findByUserName(String userName);
+
+    /**
      * 根据用户信息查询用户
      * @param user
      * @return

@@ -27,6 +27,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByUserName(String userName) {
+        User user = new User();
+        user.setUserName(userName);
+        return userMapper.selectOne(new QueryWrapper<>(user));
+    }
+
+    @Override
     public List<User> findUserByCondition(User user) {
         return user == null ? null : userMapper.selectList( new QueryWrapper<>(user));
     }

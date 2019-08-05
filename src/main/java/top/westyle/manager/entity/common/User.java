@@ -12,6 +12,8 @@ public class User extends BaseEntity {
 
     private String password;
 
+    private String passwordSalt;
+
     private Date caretedTime;
 
     private Date updatedTime;
@@ -28,8 +30,26 @@ public class User extends BaseEntity {
 
     private String valid;
 
+    private String isFinal;
+
     public String getId() {
         return id;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
+    }
+
+    public String getIsFinal() {
+        return isFinal;
+    }
+
+    public void setIsFinal(String isFinal) {
+        this.isFinal = isFinal;
     }
 
     public void setId(String id) {

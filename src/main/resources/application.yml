@@ -36,6 +36,16 @@ spring:
       use-global-data-source-stat: false
       remove-abandoned: true
       remove-abandoned-timeout: 80
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait: -1
+    timeout: 0
 #  aop:
 #    proxy-target-class: true
 #    auto: true
