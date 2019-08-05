@@ -52,6 +52,9 @@ public class ShiroRealm extends AuthorizingRealm {
         String loginName = upToken.getUsername();
         //进行用户名信息查询(数据库用户名与密码都加密了)
         User user  = userService.findByUserName(loginName);
+        if(user == null) {
+            return null;
+        }
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
         return authenticationInfo;
     }
