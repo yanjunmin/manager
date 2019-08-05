@@ -9,7 +9,7 @@ import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.RoleService;
 import top.westyle.manager.service.UserService;
-import top.westyle.manager.utils.Response;
+import top.westyle.manager.utils.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +34,13 @@ public class UserController {
         return "您好!这是您第一百次登录!";
     }
     @PostMapping("login")
-    public Response login(@RequestBody User user){
+    public Result login(@RequestBody User user){
         User userinfo = userService.findUserByCondition(user).get(0);
-        return new Response("0","登录成功", userinfo);
+        return new Result(0,"登录成功", userinfo);
     }
 
-    @RequestMapping("inser")
-    public Response testinsert(){
+    @RequestMapping("insert")
+    public Result testinsert(){
         List<User> users = new ArrayList<User>();
         for (int i = 0; i < 10; i++) {
             User user = new User();
@@ -56,6 +56,6 @@ public class UserController {
         role.setRoleName("东风股份");
         roleService.addRole(role);
         System.err.println(num);
-        return new Response("0","登录成功", null);
+        return new Result(0,"登录成功", null);
     }
 }

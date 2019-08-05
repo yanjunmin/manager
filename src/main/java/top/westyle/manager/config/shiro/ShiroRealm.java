@@ -22,8 +22,8 @@ public class ShiroRealm extends AuthorizingRealm {
     /**
      * 登录验证需要操作redis
      */
-    @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    /*@Autowired
+    private RedisTemplate<Object, Object> redisTemplate;*/
     /**
      * 用户登录信息操作
      */
