@@ -1,9 +1,6 @@
 package top.westyle.manager.config.shiro;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -51,7 +48,8 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         log.debug("登录验证");
-        String loginName = (String)authenticationToken.getPrincipal();
+        UsernamePasswordToken upToken = (UsernamePasswordToken)authenticationToken;
+        String loginName = upToken.getUsername();
         //进行用户名信息查询(数据库用户名与密码都加密了)
         User user  = userService.findByUserName(loginName);
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
