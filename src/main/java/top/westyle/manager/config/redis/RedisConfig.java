@@ -1,4 +1,3 @@
-/*
 package top.westyle.manager.config.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -42,4 +41,3 @@ public class RedisConfig {
         template.setValueSerializer(jackson2JsonRedisSerializer);
     }
 }
-*/
