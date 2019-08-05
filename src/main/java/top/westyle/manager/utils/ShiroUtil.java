@@ -1,5 +1,9 @@
 package top.westyle.manager.utils;
 
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
+
 import java.util.UUID;
 
 /**
@@ -23,5 +27,16 @@ public class ShiroUtil {
      */
     public static String createSalt(){
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * 密码加密
+     * @param credentials
+     * @param saltSource
+     * @return
+     */
+    public static String salt(String credentials, String saltSource) {
+        ByteSource salt = new Md5Hash(saltSource);
+        return new SimpleHash(hashAlgorithmName, credentials, saltSource, hashIterations).toString();
     }
 }
