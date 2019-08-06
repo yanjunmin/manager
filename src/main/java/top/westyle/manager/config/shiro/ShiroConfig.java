@@ -32,7 +32,6 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
-    @DependsOn("securityManager")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置 securityManager
@@ -69,7 +68,6 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
-    @DependsOn({"shiroRealm"})
     public SecurityManager securityManager(ShiroRealm realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 配置 rememberMeCookie 查看源码可以知道，这里的rememberMeManager就仅仅是一个赋值，所以先执行
