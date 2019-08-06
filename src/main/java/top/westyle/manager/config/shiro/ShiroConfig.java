@@ -5,6 +5,9 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -23,6 +26,51 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
+    /**
+     * redis hsot
+     */
+    private String host;
+    private String port;
+    private String ss;
+    /**
+     * 这是我自己的realm 我自定义了一个密码解析器，这个比较简单，稍微跟一下源码就知道这玩意
+     * @param matcher
+     * @return
+     */
+    @Bean("shiroRealm")
+    @DependsOn({"hashedCredentialsMatcher"})
+    public ShiroRealm shiroRealm(HashedCredentialsMatcher matcher) {
+        // 配置 Realm，需自己实现
+        ShiroRealm realm = new ShiroRealm();
+        realm.setCredentialsMatcher(matcher);
+        return realm;
+    }
+
+    /**
+     * 安全管理配置各种manager,跟xml的配置很像，但是，这里有一个细节，就是各个set的次序不能乱
+     * @author Super小靖
+     * @date 2018/8/29
+     * @param realm
+     * @return
+     **/
+    @Bean
+    public SecurityManager securityManager(ShiroRealm realm) {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(shiroRealm(createMatcher()));
+        securityManager.setSessionManager(sessionManager());
+        securityManager.setCacheManager(cacheManager());
+
+//        ModularRealmAuthorizer authorizer = new ModularRealmAuthorizer();
+//        authorizer.setRealms(securityManager.getRealms());
+//        authorizer.setPermissionResolver(new EmployeePermissionResolver());
+//        authorizer.setRolePermissionResolver(rolePermissionResolver());
+
+       // securityManager.setAuthorizer(authorizer);
+
+       // securityManager.setRememberMeManager(rememberMeManager());
+
+        return securityManager;
+    }
 
     /**
      * shiro的拦截器，在spring mvc中也有相同的配置，这里不再多说
@@ -32,7 +80,6 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
-    @DependsOn("securityManager")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置 securityManager
@@ -54,43 +101,28 @@ public class ShiroConfig {
             filterChainDefinitionMap.put(url, "anon");
         }*/
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
-       // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
+        // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
         // 除上以外所有 url都必须认证通过才可以访问，未通过认证自动访问 LoginUrl
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
-
     /**
-     * 配置各种manager,跟xml的配置很像，但是，这里有一个细节，就是各个set的次序不能乱
-     * @author Super小靖
-     * @date 2018/8/29
-     * @param realm
+     * 生成一个RedisCacheManager 这没啥好说的
+     * @author yjm
+     * @date 2019-8-6 12:37:05
      * @return
      **/
-    @Bean
-    @DependsOn({"shiroRealm"})
-    public SecurityManager securityManager(ShiroRealm realm) {
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 配置 rememberMeCookie 查看源码可以知道，这里的rememberMeManager就仅仅是一个赋值，所以先执行
-      //  securityManager.setRememberMeManager(rememberMeManager());
-        // 配置 缓存管理类 cacheManager，这个cacheManager必须要在前面执行，因为setRealm 和 setSessionManage都有方法初始化了cachemanager,看下源码就知道了
-        securityManager.setCacheManager(cacheManager(new RedisTemplate()));
-        // 配置 SecurityManager，并注入 shiroRealm 这个跟springmvc集成很像，不多说了
-        securityManager.setRealm(realm);
-        // 配置 sessionManager
-        securityManager.setSessionManager(sessionManager());
-        return securityManager;
+    private RedisCacheManager cacheManager(){
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        return  redisCacheManager;
     }
-    /**
-     * 生成一个ShiroRedisCacheManager 这没啥好说的
-     * @author Super小靖
-     * @date 2018/8/29
-     * @param template
-     * @return
-     **/
-    private ShiroRedisCacheManager cacheManager(RedisTemplate template){
-        return new ShiroRedisCacheManager(template);
+
+    private RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost("127.0.0.1:6379");
+        return redisManager;
     }
 
     /**
@@ -104,7 +136,9 @@ public class ShiroConfig {
         sessionManager.setGlobalSessionTimeout(1800000);
         //sessionManager.setSessionIdCookie(new SimpleCookie(shiroProperties.getSessionIdName()));
         // shiro自己就自定义了一个，可以直接使用，还有其他的DAO，自行查看源码即可
-        sessionManager.setSessionDAO(new RedisSessionDao());
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        sessionManager.setSessionDAO(redisSessionDAO);
         return sessionManager;
     }
 
@@ -117,20 +151,6 @@ public class ShiroConfig {
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("MD5");
         matcher.setHashIterations(1024);
         return matcher;
-    }
-
-    /**
-     * 这是我自己的realm 我自定义了一个密码解析器，这个比较简单，稍微跟一下源码就知道这玩意
-     * @param matcher
-     * @return
-     */
-    @Bean
-    @DependsOn({"hashedCredentialsMatcher"})
-    public ShiroRealm shiroRealm(HashedCredentialsMatcher matcher) {
-        // 配置 Realm，需自己实现
-        ShiroRealm realm = new ShiroRealm();
-        realm.setCredentialsMatcher(matcher);
-        return realm;
     }
 
 }
