@@ -28,12 +28,14 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
             saveRequest(request);
             if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
                 response.setCharacterEncoding("UTF-8");
+                log.info("***Accept**");
                 response.setContentType("application/json;charset=UTF-8");
                 Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
                 response.getWriter().append(JSONObject.toJSON(result).toString());
                 response.getWriter().flush();
                 response.getWriter().close();
             } else {
+                log.info("***else**");
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/html;charset=UTF-8");
                 ((HttpServletResponse) response).sendRedirect("/login");
