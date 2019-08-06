@@ -1,19 +1,19 @@
 package top.westyle.manager.controller;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.RoleService;
 import top.westyle.manager.service.UserService;
+import top.westyle.manager.utils.ResponseCode;
 import top.westyle.manager.utils.Result;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user/")
@@ -33,11 +33,6 @@ public class UserController {
     public String test(){
         return "您好!这是您第一百次登录!";
     }
-    @PostMapping("login")
-    public Result login(@RequestBody User user){
-        User userinfo = userService.findUserByCondition(user).get(0);
-        return new Result(0,"登录成功", userinfo);
-    }
 
     @RequestMapping("add")
     public Result testinsert(){
@@ -45,19 +40,28 @@ public class UserController {
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            user.setUserName("yanjdfsddugfgn"+i);
+            user.setUserName("yanjdfsddugfgns"+i);
             user.setPassword("123456" + i);
             //userService.addUser(user);
             users.add(user);
         }
        int num = userService.insertBatchUser(users);
         Role role = new Role();
-        role.setId("dddd");
+        role.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         role.setRoleName("东风股份");
         roleService.addRole(role);
         System.err.println(num);
-        return new Result(0,"登录成功", null);
+        return new Result(ResponseCode.success.getCode(),ResponseCode.success.getMsg());
     }
 
-
+    @PostMapping("login")
+    @ResponseBody
+    public Result login(@RequestParam("user") User user){
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
+        subject.login(token);
+        Map<String, String> res = new HashMap<>();
+        res.put("token", subject.getSession().getId().toString());
+        return Result.success(res);
+    }
 }

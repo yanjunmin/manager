@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUserById(User user) {
+        user.setPasswordSalt(ShiroUtil.createSalt());//用户加密盐值
+        user.setPassword(ShiroUtil.salt(user.getPassword(), user.getPasswordSalt()));//给密码加密
         return userMapper.updateById(user);
     }
 
@@ -61,6 +63,8 @@ public class UserServiceImpl implements UserService {
         int count = 0;
         for (User user:userlist
              ) {
+            user.setPasswordSalt(ShiroUtil.createSalt());//用户加密盐值
+            user.setPassword(ShiroUtil.salt(user.getPassword(), user.getPasswordSalt()));//给密码加密
             count += userMapper.insert(user);
         }
         return count;
