@@ -74,8 +74,8 @@ public class ShiroConfig {
 
     /**
      * shiro的拦截器，在spring mvc中也有相同的配置，这里不再多说
-     * @author Super小靖
-     * @date 2018/8/29
+     * @author yjm
+     * @date 2019-8-6 14:40:53
      * @param securityManager
      * @return
      **/
