@@ -46,6 +46,11 @@ spring:
         max-active: 8
         max-wait: -1
     timeout: 0
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
 #  aop:
 #    proxy-target-class: true
 #    auto: true

@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     public int addUser(User user) {
         user.setPasswordSalt(ShiroUtil.createSalt());//用户加密盐值
         user.setPassword(ShiroUtil.salt(user.getPassword(), user.getPasswordSalt()));//给密码加密
-        return userMapper.insertSelective(user);
+        return userMapper.insert(user);
     }
 
 

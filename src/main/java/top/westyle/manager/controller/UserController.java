@@ -39,7 +39,7 @@ public class UserController {
         return new Result(0,"登录成功", userinfo);
     }
 
-    @RequestMapping("insert")
+    @RequestMapping("add")
     public Result testinsert(){
         List<User> users = new ArrayList<User>();
         for (int i = 0; i < 10; i++) {

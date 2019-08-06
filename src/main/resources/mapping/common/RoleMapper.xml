@@ -23,14 +23,7 @@
     delete from sys_role
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="top.westyle.manager.entity.common.Role" >
-    insert into sys_role (id, role_name, careted_time, 
-      updated_time, created_by, updated_by, 
-      valid)
-    values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{caretedTime,jdbcType=TIMESTAMP}, 
-      #{updatedTime,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}, 
-      #{valid,jdbcType=CHAR})
-  </insert>
+
   <insert id="insertSelective" parameterType="top.westyle.manager.entity.common.Role" >
     insert into sys_role
     <trim prefix="(" suffix=")" suffixOverrides="," >
