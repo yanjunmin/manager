@@ -32,6 +32,7 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
+    @DependsOn("securityManager")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置 securityManager
@@ -69,12 +70,12 @@ public class ShiroConfig {
      **/
     @Bean
     @DependsOn({"shiroRealm"})
-    public SecurityManager securityManager(ShiroRealm realm, RedisTemplate<Object, Object> template) {
+    public SecurityManager securityManager(ShiroRealm realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 配置 rememberMeCookie 查看源码可以知道，这里的rememberMeManager就仅仅是一个赋值，所以先执行
       //  securityManager.setRememberMeManager(rememberMeManager());
         // 配置 缓存管理类 cacheManager，这个cacheManager必须要在前面执行，因为setRealm 和 setSessionManage都有方法初始化了cachemanager,看下源码就知道了
-        securityManager.setCacheManager(cacheManager(template));
+        securityManager.setCacheManager(cacheManager(new RedisTemplate()));
         // 配置 SecurityManager，并注入 shiroRealm 这个跟springmvc集成很像，不多说了
         securityManager.setRealm(realm);
         // 配置 sessionManager
