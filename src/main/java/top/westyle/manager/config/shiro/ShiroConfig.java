@@ -32,6 +32,7 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
+    @DependsOn("securityManager")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         // 设置 securityManager
