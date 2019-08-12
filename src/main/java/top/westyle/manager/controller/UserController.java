@@ -1,5 +1,7 @@
 package top.westyle.manager.controller;
 
+import com.cxytiandi.encrypt.springboot.annotation.Decrypt;
+import com.cxytiandi.encrypt.springboot.annotation.Encrypt;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -54,6 +56,8 @@ public class UserController {
         return new Result(ResponseCode.success.getCode(),ResponseCode.success.getMsg());
     }
 
+   // @Encrypt
+    @Decrypt
     @PostMapping("login")
     @ResponseBody
     public Result login(@RequestBody User user){
