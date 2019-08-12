@@ -57,7 +57,6 @@ public class UserController {
     @PostMapping("login")
     @ResponseBody
     public Result login(@RequestBody User user){
-        System.out.println(user.getUserName());
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
         subject.login(token);
