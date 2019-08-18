@@ -1,12 +1,14 @@
 package top.westyle.manager.controller;
 
 import com.cxytiandi.encrypt.springboot.annotation.Decrypt;
-import com.cxytiandi.encrypt.springboot.annotation.Encrypt;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.RoleService;
@@ -14,11 +16,10 @@ import top.westyle.manager.service.UserService;
 import top.westyle.manager.utils.ResponseCode;
 import top.westyle.manager.utils.Result;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -56,10 +57,9 @@ public class UserController {
         return new Result(ResponseCode.success.getCode(),ResponseCode.success.getMsg());
     }
 
-   // @Encrypt
-    @Decrypt
+   //@Encrypt
+   @Decrypt
     @PostMapping("login")
-    @ResponseBody
     public Result login(@RequestBody User user){
         System.out.println(user.getUserName());
         Subject subject = SecurityUtils.getSubject();

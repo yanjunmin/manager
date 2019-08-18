@@ -53,8 +53,6 @@ spring:
       enabled: true
   encrypt:
     key: abcdef0123456789
-  freemarker:
-    content-type: text/html
 #  aop:
 #    proxy-target-class: true
 #    auto: true
