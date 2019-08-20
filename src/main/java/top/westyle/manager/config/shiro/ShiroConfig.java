@@ -136,7 +136,7 @@ public class ShiroConfig {
      * @return DefaultWebSessionManager
      */
     private DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        ShiroRedisSessionManager sessionManager = new ShiroRedisSessionManager();
         // 设置session超时时间，单位为毫秒
         sessionManager.setGlobalSessionTimeout(1800000);
         //sessionManager.setSessionIdCookie(new SimpleCookie(shiroProperties.getSessionIdName()));
