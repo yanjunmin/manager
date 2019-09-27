@@ -129,6 +129,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.yinjihuan</groupId>
             <artifactId>monkey-api-encrypt</artifactId>
             <version>1.1.2</version>
