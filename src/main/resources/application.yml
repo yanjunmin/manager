@@ -60,5 +60,4 @@ mybatis-plus:
   type-aliases-package: top.westyle.manager.entity.*
   mapper-locations: classpath:mapping/**/*.xml
 logging:
-  level:
-    top.westyle.manager.*: DEBUG
+  config: classpath:logback-spring.xml

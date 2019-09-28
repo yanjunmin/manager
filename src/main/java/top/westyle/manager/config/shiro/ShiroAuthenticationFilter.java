@@ -38,7 +38,7 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
                 log.info("***else**");
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("text/html;charset=UTF-8");
-                ((HttpServletResponse) response).sendRedirect("/login");
+                ((HttpServletResponse) response).sendRedirect("/user/login");
             }
             return false;
         }
