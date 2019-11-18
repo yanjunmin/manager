@@ -2,6 +2,7 @@ package top.westyle.manager.config.shiro;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.shiro.web.filter.authc.PassThruAuthenticationFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import top.westyle.manager.utils.ResponseCode;
@@ -25,22 +26,13 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
         if (isLoginRequest(request, response)) {
             return true;
         } else {
-            saveRequest(request);
-            if (((HttpServletRequest) request).getHeader("Accept").contains("application/json")) {
                 response.setCharacterEncoding("UTF-8");
-                log.info("***Accept**");
                 response.setContentType("application/json;charset=UTF-8");
                 Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
                 response.getWriter().append(JSONObject.toJSON(result).toString());
                 response.getWriter().flush();
                 response.getWriter().close();
-            } else {
-                log.info("***else**");
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("text/html;charset=UTF-8");
-                ((HttpServletResponse) response).sendRedirect("/user/login");
-            }
-            return false;
+                return false;
         }
     }
 }

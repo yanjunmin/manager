@@ -55,7 +55,7 @@ public class ShiroRealm extends AuthorizingRealm {
         if(user == null) {
             return null;
         }
-        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(loginName, user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
+        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
         return authenticationInfo;
     }
 }

@@ -98,8 +98,7 @@ public class ShiroConfig {
         for (String url : anonUrls) {
             filterChainDefinitionMap.put(url, "anon");
         }*/
-        filterChainDefinitionMap.put("/user/add", "anon");
-        filterChainDefinitionMap.put("/user/update", "anon");
+
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         Map<String, Filter> filters = new HashMap<>();
@@ -121,6 +120,7 @@ public class ShiroConfig {
     private RedisCacheManager cacheManager(){
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         redisCacheManager.setRedisManager(redisManager());
+        //redisCacheManager.setPrincipalIdFieldName("id");
         return  redisCacheManager;
     }
 
