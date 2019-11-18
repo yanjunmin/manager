@@ -8,6 +8,7 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -29,9 +30,12 @@ public class ShiroConfig {
     /**
      * redis hsot
      */
+    @Value("${spring.redis.host}")
     private String host;
-    private String port;
-    private String ss;
+    @Value("${spring..redis.port}")
+    private int port;
+    @Value("${spring.redis.timeout}")
+    private int timeout;
     /**
      * 这是我自己的realm 我自定义了一个密码解析器，这个比较简单，稍微跟一下源码就知道这玩意
      * @param matcher
@@ -54,7 +58,7 @@ public class ShiroConfig {
      * @return
      **/
     @Bean
-    public SecurityManager securityManager(ShiroRealm realm) {
+    public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm(createMatcher()));
         securityManager.setSessionManager(sessionManager());
@@ -126,7 +130,9 @@ public class ShiroConfig {
 
     private RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost("127.0.0.1:6379");
+        redisManager.setHost(host);
+        redisManager.setPort(port);
+        redisManager.setTimeout(timeout);
         return redisManager;
     }
 
@@ -138,7 +144,7 @@ public class ShiroConfig {
     private DefaultWebSessionManager sessionManager() {
         ShiroRedisSessionManager sessionManager = new ShiroRedisSessionManager();
         // 设置session超时时间，单位为毫秒
-        sessionManager.setGlobalSessionTimeout(1800000);
+        sessionManager.setGlobalSessionTimeout(timeout);
         //sessionManager.setSessionIdCookie(new SimpleCookie(shiroProperties.getSessionIdName()));
         // shiro自己就自定义了一个，可以直接使用，还有其他的DAO，自行查看源码即可
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();

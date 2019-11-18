@@ -82,9 +82,15 @@ public class UserController {
     }
 
     @GetMapping("logout")
-    public Result logout(HttpServletRequest httpServletRequest){
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
+    public Result logout(){
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            subject.logout();
+            return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(ResponseCode.error.getCode(), ResponseCode.error.getMsg());
+        }
+
     }
 }
