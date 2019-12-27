@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @Author yjm
  * @Date 2019-8-5 23:26:54
- * @Description 登录过滤器
+ * @Description 没有登录过滤器(前后端分离做出友好提示)
  */
 public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
     private static Logger log = LoggerFactory.getLogger(ShiroAuthenticationFilter.class);
@@ -27,13 +27,13 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
             log.info("已经登陆");
             return true;
         } else {
-                response.setCharacterEncoding("UTF-8");
-                response.setContentType("application/json;charset=UTF-8");
-                Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
-                response.getWriter().append(JSONObject.toJSON(result).toString());
-                response.getWriter().flush();
-                response.getWriter().close();
-                return false;
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=UTF-8");
+            Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());
+            response.getWriter().append(JSONObject.toJSON(result).toString());
+            response.getWriter().flush();
+            response.getWriter().close();
+            return false;
         }
     }
 }

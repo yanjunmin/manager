@@ -8,7 +8,7 @@ public enum ResponseCode{
 	error(20000, "服务器错误"),
 	unknown_account(20001, "账户不存在"),
     forbidden_account(20002, "账户已禁用"),
-    password_incorrect(20003, "密码错误"),
+    password_incorrect(20003, "账户或密码错误"),
     verify_captcha_error(20004, "验证码错误,请重新刷新并滑动验证码!"),
     unauthorized(20005, "无操作权限"),
     can_not_edit(20006, "该条记录无法编辑"),

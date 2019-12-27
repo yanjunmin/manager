@@ -43,8 +43,8 @@ public class UserController {
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            user.setUserName("yanjunmin"+i);
-            user.setPassword("yanjunmin" + i);
+            user.setUserName("yanjunmingg"+i);
+            user.setPassword("yanjunmingg" + i);
             //userService.addUser(user);
             users.add(user);
         }
