@@ -101,6 +101,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/add", "anon");
         filterChainDefinitionMap.put("/user/update", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
+        filterChainDefinitionMap.put("/druid", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         Map<String, Filter> filters = new HashMap<>();
         filters.put("authc", new ShiroAuthenticationFilter());

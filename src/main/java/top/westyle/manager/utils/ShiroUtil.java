@@ -37,6 +37,6 @@ public class ShiroUtil {
      */
     public static String salt(String credentials, String saltSource) {
         ByteSource salt = new Md5Hash(saltSource);
-        return new SimpleHash(hashAlgorithmName, credentials, saltSource, hashIterations).toString();
+        return new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations).toString();
     }
 }
