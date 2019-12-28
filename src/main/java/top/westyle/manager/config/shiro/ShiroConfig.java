@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
@@ -104,7 +105,8 @@ public class ShiroConfig {
         }*/
 
         filterChainDefinitionMap.put("/user/login", "anon");
-        filterChainDefinitionMap.put("/druid", "anon");
+        filterChainDefinitionMap.put("/user/add", "anon");
+        filterChainDefinitionMap.put("/druid/*", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
         // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
@@ -165,4 +167,12 @@ public class ShiroConfig {
         return matcher;
     }
 
+    /**
+     * 注册全局异常处理
+     * @return
+     */
+    @Bean(name = "exceptionHandler")
+    public HandlerExceptionResolver handlerExceptionResolver() {
+        return new ShiroExceptionHandler();
+    }
 }

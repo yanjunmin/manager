@@ -63,32 +63,16 @@ public class UserController {
     public Result login(@RequestBody User user){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
-       try {
-           subject.login(token);
-           Map<String, String> res = new HashMap<>();
-           res.put("token", subject.getSession().getId().toString());
-           return Result.success(res);
-       } catch (IncorrectCredentialsException e) {
-           return new Result(ResponseCode.password_incorrect.getCode(), ResponseCode.password_incorrect.getMsg());
-       }catch (LockedAccountException e){
-           return new Result(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
-       }catch (AuthenticationException e){
-           return new Result(ResponseCode.unknown_account.getCode(), ResponseCode.unknown_account.getMsg());
-       }catch (Exception e){
-          return Result.error();
-       }
+       subject.login(token);
+       Map<String, String> res = new HashMap<>();
+       res.put("token", subject.getSession().getId().toString());
+       return Result.success(res);
     }
 
     @GetMapping("logout")
     public Result logout(){
-        try {
-            Subject subject = SecurityUtils.getSubject();
-            subject.logout();
-            return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(ResponseCode.error.getCode(), ResponseCode.error.getMsg());
-        }
-
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
     }
 }
