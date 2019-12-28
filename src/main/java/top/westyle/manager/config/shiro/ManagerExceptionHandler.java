@@ -8,7 +8,6 @@ import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import top.westyle.manager.utils.ResponseCode;
-import top.westyle.manager.utils.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +19,7 @@ import java.util.Map;
  * @date 2019-12-28 12:21:17
  * @author yjm
  */
-public class ShiroExceptionHandler implements HandlerExceptionResolver {
+public class ManagerExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView mv = new ModelAndView();

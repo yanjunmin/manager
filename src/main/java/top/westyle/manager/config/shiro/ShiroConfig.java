@@ -173,6 +173,6 @@ public class ShiroConfig {
      */
     @Bean(name = "exceptionHandler")
     public HandlerExceptionResolver handlerExceptionResolver() {
-        return new ShiroExceptionHandler();
+        return new ManagerExceptionHandler();
     }
 }
