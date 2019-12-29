@@ -6,6 +6,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.westyle.manager.config.shiro.ShiroSessionListener;
 import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.RoleService;
@@ -61,6 +62,8 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
        subject.login(token);
+       System.out.println("当前登录人数：" +ShiroSessionListener.getSessionCount());
+       System.out.println(subject.getPrincipal());
        Map<String, String> res = new HashMap<>();
        res.put("token", subject.getSession().getId().toString());
        return Result.success(res);

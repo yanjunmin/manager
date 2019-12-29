@@ -7,7 +7,7 @@ import com.cxytiandi.encrypt.util.AesEncryptUtils;
  */
 public class EncryTest {
     public static void main(String[] args) throws Exception {
-        String content = "{\"userName\":\"yanjunmingg\", \"password\":\"yanjunmingg0\"}";
+        String content = "{\"userName\":\"yanjunmingg0\", \"password\":\"yanjunmingg00\"}";
         System.out.println("加密前：" + content);
         String encrypt = AesEncryptUtils.aesEncrypt(content, "abcdefyjm3456789");
         System.out.println(encrypt.length() + ":加密后：" + encrypt);

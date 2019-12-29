@@ -1,6 +1,7 @@
 package top.westyle.manager.config.shiro;
 
 import com.alibaba.fastjson.support.spring.FastJsonJsonView;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -44,6 +45,9 @@ public class ManagerExceptionHandler implements HandlerExceptionResolver {
         } else if (ex instanceof LockedAccountException) {
             attributes.put("code", ResponseCode.forbidden_account.getCode());
             attributes.put("msg", ResponseCode.forbidden_account.getMsg());
+        } else if (ex instanceof ExcessiveAttemptsException) {
+            attributes.put("code", ResponseCode.login_count_max.getCode());
+            attributes.put("msg", ResponseCode.login_count_max.getMsg());
         } else {
             logger.info(ex.getClass().getName());
             attributes.put("code", ResponseCode.error.getCode());

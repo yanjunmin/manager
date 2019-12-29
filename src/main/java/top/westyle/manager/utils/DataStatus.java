@@ -4,23 +4,23 @@ package top.westyle.manager.utils;
  * 数据状态
  */
 public enum DataStatus {
-    normal(1, "正常"),
-    delete(0, "已删除"),
-    forbidden(2, "已禁用");
+    normal("1", "正常"),
+    delete("0", "已删除"),
+    forbidden("2", "已禁用");
 
-    private int code;
+    private String code;
     private String msg;
 
-    DataStatus(int code, String msg){
+    DataStatus(String code, String msg){
         this.code = code;
         this.msg = msg;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
