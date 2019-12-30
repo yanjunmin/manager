@@ -49,7 +49,7 @@ public class ManagerExceptionHandler implements HandlerExceptionResolver {
             attributes.put("code", ResponseCode.login_count_max.getCode());
             attributes.put("msg", ResponseCode.login_count_max.getMsg());
         } else {
-            logger.info(ex.getClass().getName());
+            logger.info(ex.getMessage());
             attributes.put("code", ResponseCode.error.getCode());
             attributes.put("msg", ResponseCode.error.getMsg());
         }

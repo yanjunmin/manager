@@ -63,9 +63,10 @@ public class UserController {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
        subject.login(token);
        System.out.println("当前登录人数：" +ShiroSessionListener.getSessionCount());
-       System.out.println(subject.getPrincipal());
        Map<String, String> res = new HashMap<>();
        res.put("token", subject.getSession().getId().toString());
+       User loginUser =(User)subject.getPrincipal();
+       System.out.println(loginUser.getPassword());
        return Result.success(res);
     }
 
