@@ -6,6 +6,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -61,7 +62,7 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroRedisSessionManager shiroRedisSessionManager = (ShiroRedisSessionManager)defaultWebSecurityManager.getSessionManager();
         Collection<Session> sessions = shiroRedisSessionManager.getSessionDAO().getActiveSessions();//获取当前已登录用户的sesion列表
         for (Session session : sessions) {
-            log.info("session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)){}", session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
+            log.info("session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)):  {}", (SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
             if(loginName.equals(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)))) {
                 //删除用户之前登录的session
                 shiroRedisSessionManager.getSessionDAO().delete(session);
