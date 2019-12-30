@@ -2,13 +2,11 @@ package top.westyle.manager.controller;
 
 import com.cxytiandi.encrypt.springboot.annotation.Decrypt;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.westyle.manager.config.shiro.ShiroSessionListener;
 import top.westyle.manager.entity.common.Role;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.RoleService;
@@ -63,32 +61,18 @@ public class UserController {
     public Result login(@RequestBody User user){
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
-       try {
-           subject.login(token);
-           Map<String, String> res = new HashMap<>();
-           res.put("token", subject.getSession().getId().toString());
-           return Result.success(res);
-       } catch (IncorrectCredentialsException e) {
-           return new Result(ResponseCode.password_incorrect.getCode(), ResponseCode.password_incorrect.getMsg());
-       }catch (LockedAccountException e){
-           return new Result(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
-       }catch (AuthenticationException e){
-           return new Result(ResponseCode.unknown_account.getCode(), ResponseCode.unknown_account.getMsg());
-       }catch (Exception e){
-          return Result.error();
-       }
+       subject.login(token);
+       System.out.println("当前登录人数：" +ShiroSessionListener.getSessionCount());
+       System.out.println(subject.getPrincipal());
+       Map<String, String> res = new HashMap<>();
+       res.put("token", subject.getSession().getId().toString());
+       return Result.success(res);
     }
 
     @GetMapping("logout")
     public Result logout(){
-        try {
-            Subject subject = SecurityUtils.getSubject();
-            subject.logout();
-            return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(ResponseCode.error.getCode(), ResponseCode.error.getMsg());
-        }
-
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
     }
 }

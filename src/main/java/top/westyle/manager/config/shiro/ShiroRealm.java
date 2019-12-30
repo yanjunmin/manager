@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import top.westyle.manager.entity.common.User;
 import top.westyle.manager.service.UserService;
+import top.westyle.manager.utils.DataStatus;
 
 import java.util.Collection;
 
@@ -62,18 +63,24 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroRedisSessionManager shiroRedisSessionManager = (ShiroRedisSessionManager)defaultWebSecurityManager.getSessionManager();
         Collection<Session> sessions = shiroRedisSessionManager.getSessionDAO().getActiveSessions();//获取当前已登录用户的sesion列表
         for (Session session : sessions) {
+
             log.info("session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)):  {}", (SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY));
+
             if(loginName.equals(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)))) {
                 //删除用户之前登录的session
+                log.info("登录过的用户给名称:{}", String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)));
                 shiroRedisSessionManager.getSessionDAO().delete(session);
             }
         }
         //进行用户名信息查询
         User user  = userService.findByUserName(loginName);
-        if(user == null) {
+        if(user == null || DataStatus.delete.getCode().equals(user.getValid())) {//为空或者被删除
             return null;
         }
-        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
+        if (DataStatus.forbidden.getCode().equals(user.getValid())) {//账户被禁用
+            throw new LockedAccountException();
+        }
+        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(), ByteSource.Util.bytes(user.getPasswordSalt()),getName());
         return authenticationInfo;
     }
 }

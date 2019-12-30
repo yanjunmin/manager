@@ -2,6 +2,8 @@ package top.westyle.manager.config.shiro;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.SessionListener;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
@@ -13,11 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.Filter;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -42,8 +43,8 @@ public class ShiroConfig {
      * @return
      */
     @Bean("shiroRealm")
-    @DependsOn({"hashedCredentialsMatcher"})
-    public ShiroRealm shiroRealm(HashedCredentialsMatcher matcher) {
+    @DependsOn({"myCredentialsMatcher"})
+    public ShiroRealm shiroRealm(MyCredentialsMatcher matcher) {
         // 配置 Realm，需自己实现
         ShiroRealm realm = new ShiroRealm();
         realm.setCredentialsMatcher(matcher);
@@ -54,7 +55,7 @@ public class ShiroConfig {
      * 安全管理配置各种manager,跟xml的配置很像，但是，这里有一个细节，就是各个set的次序不能乱
      * @author Super小靖
      * @date 2018/8/29
-     * @param realm
+     * @param
      * @return
      **/
     @Bean
@@ -104,7 +105,8 @@ public class ShiroConfig {
         }*/
 
         filterChainDefinitionMap.put("/user/login", "anon");
-        filterChainDefinitionMap.put("/druid", "anon");
+        filterChainDefinitionMap.put("/user/add", "anon");
+        filterChainDefinitionMap.put("/druid/*", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
         // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
@@ -143,26 +145,63 @@ public class ShiroConfig {
      * @return DefaultWebSessionManager
      */
     private DefaultWebSessionManager sessionManager() {
+
         ShiroRedisSessionManager sessionManager = new ShiroRedisSessionManager();
         // 设置session超时时间，单位为毫秒
-        sessionManager.setGlobalSessionTimeout(timeout);
+        //sessionManager.setGlobalSessionTimeout(timeout);
         //sessionManager.setSessionIdCookie(new SimpleCookie(shiroProperties.getSessionIdName()));
         // shiro自己就自定义了一个，可以直接使用，还有其他的DAO，自行查看源码即可
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         redisSessionDAO.setRedisManager(redisManager());
         sessionManager.setSessionDAO(redisSessionDAO);
+        Collection<SessionListener> listeners = new ArrayList<>();
+        //配置监听
+        listeners.add(sessionListener());
+        sessionManager.setSessionListeners(listeners);
         return sessionManager;
     }
 
     /**告诉shiro加密方式
-     * 密码解析器 有好几种，我这是MD5 1024次加密
+     * 密码解析器 有好几种，我这是自定义密码匹配器集成MD5 1024次加密
      * @return
      */
-    @Bean(name = "hashedCredentialsMatcher")
-    public HashedCredentialsMatcher createMatcher(){
-        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("MD5");
+    @Bean(name = "myCredentialsMatcher")
+    public MyCredentialsMatcher createMatcher(){
+        MyCredentialsMatcher matcher = new MyCredentialsMatcher("MD5", cacheManager());
         matcher.setHashIterations(1024);
         return matcher;
     }
 
+    /**
+     * 开启shiro aop注解支持.
+     * 使用代理方式;所以需要开启代码支持;
+     *
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * 注册全局异常处理
+     * @return
+     */
+    @Bean(name = "exceptionHandler")
+    public HandlerExceptionResolver handlerExceptionResolver() {
+        return new ManagerExceptionHandler();
+    }
+
+    /**
+     * 配置session监听
+     * @return
+     */
+    @Bean("sessionListener")
+    public ShiroSessionListener sessionListener(){
+        ShiroSessionListener sessionListener = new ShiroSessionListener();
+        return sessionListener;
+    }
 }
