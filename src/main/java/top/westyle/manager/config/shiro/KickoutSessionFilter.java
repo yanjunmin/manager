@@ -8,6 +8,8 @@ import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import top.westyle.manager.entity.common.User;
 
 import javax.servlet.ServletRequest;
@@ -20,6 +22,9 @@ import java.util.LinkedList;
  * shiro 自定义filter 实现 并发登录控制
  */
 public class KickoutSessionFilter extends AccessControlFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(KickoutSessionFilter.class);
+
     /** 踢出后到的地址 */
     private String kickoutUrl;
     /**  踢出之前登录的/之后登录的用户 默认踢出之前登录的用户 */
@@ -62,6 +67,8 @@ public class KickoutSessionFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+        String msg = "进入了";
+        logger.info("开始踢出先登录的用户session,用户名: {}", msg);
         Subject subject = getSubject(request, response);
         if(!subject.isAuthenticated() && !subject.isRemembered()) {
             //如果没有登录，直接进行之后的流程
@@ -69,16 +76,16 @@ public class KickoutSessionFilter extends AccessControlFilter {
         }
 
         Session session = subject.getSession();
-        //这里获取的User是实体 因为我在 自定义ShiroRealm中的doGetAuthenticationInfo方法中
-        //new SimpleAuthenticationInfo(user, password, getName()); 传的是 Username 所以这里拿到的也是username,如果传的是userName 这里拿到的就是userName
-        String username = (String) subject.getPrincipal();
+        //这里获取的是用户 因为我在 自定义ShiroRealm中的doGetAuthenticationInfo方法中
+        //new SimpleAuthenticationInfo(user, password, getName()); 传的是 user 所以这里拿到的也是user,如果传的是userName 这里拿到的就是userName
+        User user = (User) subject.getPrincipal();
         Serializable sessionId = session.getId();
 
         // 初始化用户的队列放到缓存里
-        Deque<Serializable> deque = cache.get(username);
+        Deque<Serializable> deque = cache.get(user.getUserName());
         if(deque == null) {
             deque = new LinkedList<>();
-            cache.put(username, deque);
+            cache.put(user.getUserName(), deque);
         }
 
         //如果队列里没有此sessionId，且用户没有被踢出；放入队列
@@ -90,7 +97,6 @@ public class KickoutSessionFilter extends AccessControlFilter {
         while(deque.size() > maxSession) {
             Serializable kickoutSessionId = null;
             if(kickoutAfter) { //如果踢出后者
-                kickoutSessionId=deque.getFirst();
                 kickoutSessionId = deque.removeFirst();
             } else { //否则踢出前者
                 kickoutSessionId = deque.removeLast();
@@ -110,6 +116,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
         if (session.getAttribute("kickout") != null) {
             //会话被踢出了
             try {
+                logger.info("开始踢出先登录的用户session,用户名: {}", user.getUserName());
                 subject.logout();
             } catch (Exception e) {
             }

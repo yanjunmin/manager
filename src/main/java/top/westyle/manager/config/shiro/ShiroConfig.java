@@ -111,9 +111,11 @@ public class ShiroConfig {
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
         // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
         // 除上以外所有 url都必须认证通过才可以访问，未通过认证自动访问 LoginUrl
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/**", "kickout,authc");
+
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         Map<String, Filter> filters = new HashMap<>();
+        filters.put("kickout",kickoutSessionFilter());
         filters.put("authc", new ShiroAuthenticationFilter());
         shiroFilterFactoryBean.setFilters(filters);
         return shiroFilterFactoryBean;
@@ -203,5 +205,29 @@ public class ShiroConfig {
     public ShiroSessionListener sessionListener(){
         ShiroSessionListener sessionListener = new ShiroSessionListener();
         return sessionListener;
+    }
+
+    /**
+     *
+     * @描述：kickoutSessionFilter同一个用户多设备登录限制
+     * @创建人：wyait
+     * @创建时间：2018年4月24日 下午8:14:28
+     * @return
+     */
+    public KickoutSessionFilter kickoutSessionFilter(){
+        KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
+        //使用cacheManager获取相应的cache来缓存用户登录的会话；用于保存用户—会话之间的关系的；
+        //这里我们还是用之前shiro使用的ehcache实现的cacheManager()缓存管理
+        //也可以重新另写一个，重新配置缓存时间之类的自定义缓存属性
+        kickoutSessionFilter.setCacheManager(cacheManager());
+        //用于根据会话ID，获取会话进行踢出操作的；
+        kickoutSessionFilter.setSessionManager(sessionManager());
+        //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。
+        kickoutSessionFilter.setKickoutAfter(false);
+        //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
+        kickoutSessionFilter.setMaxSession(1);
+        //被踢出后重定向到的地址；
+        kickoutSessionFilter.setKickoutUrl("/unlogin");
+        return kickoutSessionFilter;
     }
 }

@@ -3,6 +3,8 @@ package top.westyle.manager.config.shiro;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,6 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  *  配置session监听器
  */
 public class ShiroSessionListener implements SessionListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(KickoutSessionFilter.class);
     /**
      * 统计在线人数
      * 线程安全
@@ -22,6 +26,7 @@ public class ShiroSessionListener implements SessionListener {
      */
     @Override
     public void onStart(Session session) {
+        logger.info("触发创建回话");
         //会话创建，在线人数加一
         sessionCount.incrementAndGet();
     }
@@ -31,6 +36,7 @@ public class ShiroSessionListener implements SessionListener {
      */
     @Override
     public void onStop(Session session) {
+        logger.info("触发退出回话");
         //会话退出,在线人数减一
         sessionCount.decrementAndGet();
     }
