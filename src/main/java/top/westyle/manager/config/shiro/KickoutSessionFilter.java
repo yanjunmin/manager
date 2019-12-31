@@ -34,6 +34,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
     private int maxSession = 1;
     private SessionManager sessionManager;
     private Cache<String, Deque<Serializable>> cache;
+    private String kickoutAttrName = "kickout";
 
     public void setKickoutUrl(String kickoutUrl) {
         this.kickoutUrl = kickoutUrl;
@@ -67,59 +68,68 @@ public class KickoutSessionFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        String msg = "进入了";
-        logger.info("开始踢出先登录的用户session,用户名: {}", msg);
+        logger.info("-------------进入了-----");
         Subject subject = getSubject(request, response);
         if(!subject.isAuthenticated() && !subject.isRemembered()) {
             //如果没有登录，直接进行之后的流程
+            logger.info("没有登录直接返回");
             return true;
         }
 
         Session session = subject.getSession();
-        //这里获取的是用户 因为我在 自定义ShiroRealm中的doGetAuthenticationInfo方法中
-        //new SimpleAuthenticationInfo(user, password, getName()); 传的是 user 所以这里拿到的也是user,如果传的是userName 这里拿到的就是userName
         User user = (User) subject.getPrincipal();
+        String username = user.getUserName();
+        logger.info("确定登录了： {}", username);
         Serializable sessionId = session.getId();
-
-        // 初始化用户的队列放到缓存里
-        Deque<Serializable> deque = cache.get(user.getUserName());
-        if(deque == null) {
-            deque = new LinkedList<>();
-            cache.put(user.getUserName(), deque);
+        //读取缓存   没有就存入
+        Deque<Serializable> deque = cache.get(username);
+        if(deque==null){
+            deque = new LinkedList<Serializable>();
         }
-
         //如果队列里没有此sessionId，且用户没有被踢出；放入队列
-        if(!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
+        if(!deque.contains(sessionId) && session.getAttribute(kickoutAttrName) == null) {
+            //将sessionId存入队列
             deque.push(sessionId);
+            //将用户的sessionId队列缓存
+            cache.put(username, deque);
+            logger.info("队列里没有此sessionId，且用户没有被踢出；放入队列 {}", sessionId);
         }
 
         //如果队列里的sessionId数超出最大会话数，开始踢人
         while(deque.size() > maxSession) {
+            logger.info("进入队列大小超出最大人数限制 {}", deque.size());
             Serializable kickoutSessionId = null;
             if(kickoutAfter) { //如果踢出后者
                 kickoutSessionId = deque.removeFirst();
             } else { //否则踢出前者
                 kickoutSessionId = deque.removeLast();
             }
+            //踢出后再更新下缓存队列
+            cache.put(username, deque);
             try {
+                //获取被踢出的sessionId的session对象
                 Session kickoutSession = sessionManager.getSession(new DefaultSessionKey(kickoutSessionId));
                 if(kickoutSession != null) {
+                    logger.info("给被踢出的session加上踢出属性：{}", kickoutSession.getId());
                     //设置会话的kickout属性表示踢出了
-                    kickoutSession.setAttribute("kickout", true);
+                    kickoutSession.setAttribute(kickoutAttrName, true);
                 }
             } catch (Exception e) {//ignore exception
-                e.printStackTrace();
             }
         }
 
         //如果被踢出了，直接退出，重定向到踢出后的地址
-        if (session.getAttribute("kickout") != null) {
+        if (session.getAttribute(kickoutAttrName)!=null&&(Boolean)session.getAttribute(kickoutAttrName) == true) {
+            logger.info("说明当前session是需要被踢出的：{}", session.getId());
             //会话被踢出了
             try {
-                logger.info("开始踢出先登录的用户session,用户名: {}", user.getUserName());
+                //退出登录
                 subject.logout();
-            } catch (Exception e) {
+                logger.info("踢出session成功：{}", session.getId());
+            } catch (Exception e) { //ignore
             }
+            //saveRequest(request);
+            //重定向
             WebUtils.issueRedirect(request, response, kickoutUrl);
             return false;
         }

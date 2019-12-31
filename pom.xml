@@ -103,7 +103,7 @@
             <artifactId>shiro-redis</artifactId>
             <version>3.1.0</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
@@ -113,7 +113,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>springloaded</artifactId>
             <version>1.2.6.RELEASE</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>

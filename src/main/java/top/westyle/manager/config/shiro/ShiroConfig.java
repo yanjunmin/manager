@@ -107,6 +107,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/druid/*", "anon");
         filterChainDefinitionMap.put("/user/logout", "anon");
+        filterChainDefinitionMap.put("/user/kickOut", "anon");
         // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
         // filterChainDefinitionMap.put(shiroProperties.getLogoutUrl(), "logout");
         // 除上以外所有 url都必须认证通过才可以访问，未通过认证自动访问 LoginUrl
@@ -222,11 +223,11 @@ public class ShiroConfig {
         //用于根据会话ID，获取会话进行踢出操作的；
         kickoutSessionFilter.setSessionManager(sessionManager());
         //是否踢出后来登录的，默认是false；即后者登录的用户踢出前者登录的用户；踢出顺序。
-        kickoutSessionFilter.setKickoutAfter(false);
+        kickoutSessionFilter.setKickoutAfter(false);//false 表示踢出前一个登录的用户
         //同一个用户最大的会话数，默认1；比如2的意思是同一个用户允许最多同时两个人登录；
         kickoutSessionFilter.setMaxSession(1);
         //被踢出后重定向到的地址；
-        kickoutSessionFilter.setKickoutUrl("/unlogin");
+        kickoutSessionFilter.setKickoutUrl("/user/kickOut");
         return kickoutSessionFilter;
     }
 }

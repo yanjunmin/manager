@@ -27,6 +27,7 @@ public class ShiroAuthenticationFilter extends PassThruAuthenticationFilter {
             log.info("已经登陆");
             return true;
         } else {
+            log.info("没有登录，被拦截");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");
             Result result = new Result(ResponseCode.unauthenticated.getCode(), ResponseCode.unauthenticated.getMsg());

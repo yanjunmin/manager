@@ -22,7 +22,8 @@ public enum ResponseCode{
     login_name_already_exist(30005, "该登录名已存在"),
     code_already_exist(30006, "该编码已存在"),
     fullname_already_exist(30007, "该全称已存在"),
-    login_count_max(3008, "用户登录次数超限，请于30分钟后再试");
+    login_count_max(3008, "用户登录次数超限，请于30分钟后再试"),
+    force_logout(3009, "您已被迫下线,该账户已在其地方登录,请确认!");
 
     private int code;
     private String msg;

@@ -41,7 +41,7 @@ public class UserController {
         for (int i = 0; i < 10; i++) {
             User user = new User();
             user.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            user.setUserName("yanjunmingg"+i);
+            user.setUserName("yanjunminggg"+i);
             user.setPassword("yanjunmingg" + i);
             //userService.addUser(user);
             users.add(user);
@@ -73,7 +73,19 @@ public class UserController {
     @GetMapping("logout")
     public Result logout(){
         Subject subject = SecurityUtils.getSubject();
+        User loginUser =(User)subject.getPrincipal();
+        System.out.println("loginUser: " + loginUser.getUserName());
         subject.logout();
+
         return new Result(ResponseCode.success.getCode(), ResponseCode.success.getMsg());
+    }
+
+    /**
+     * 当用户被踢出后给用户反馈提示信息
+     * @return
+     */
+    @GetMapping("kickOut")
+    public Result kickOut() {
+        return new Result(ResponseCode.force_logout.getCode(), ResponseCode.force_logout.getMsg());
     }
 }
