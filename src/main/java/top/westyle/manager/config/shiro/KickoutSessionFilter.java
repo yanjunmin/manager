@@ -128,7 +128,7 @@ public class KickoutSessionFilter extends AccessControlFilter {
                 logger.info("踢出session成功：{}", session.getId());
             } catch (Exception e) { //ignore
             }
-            //saveRequest(request);
+            saveRequest(request);
             //重定向
             WebUtils.issueRedirect(request, response, kickoutUrl);
             return false;
